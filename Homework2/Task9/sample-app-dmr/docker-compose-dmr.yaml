@@ -1,0 +1,21 @@
+services:
+  streamlit-app:
+    image: streamlit-app:dmr
+    restart: unless-stopped
+    ports:
+      - "8501:8501"
+    environment:
+      DMR_BASE: "http://model-runner.docker.internal:12434"
+      DMR_CHAT_PATH: "/engines/llama.cpp/v1/chat/completions"
+      DMR_MODEL: "ai/smollm2:135M-Q4_K_M"
+    extra_hosts:
+      - "model-runner.docker.internal:host-gateway"
+    models:
+      - smollm2
+# It didn't work for me due to some DNS issues. So I used the environment variables and extra_hosts instead
+#      smollm2:
+#        endpoint_var: DMR_BASE
+#        model_var: DMR_MODEL
+models:
+  smollm2:
+    model: ai/smollm2:135M-Q4_K_M
