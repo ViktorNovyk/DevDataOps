@@ -1,0 +1,59 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: awesome-spring-postgres-config
+data:
+  SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: awesome-spring-postgres
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: awesome-spring-postgres
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: awesome-spring-postgres
+  labels:
+    app: awesome-spring-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: awesome-spring-postgres
+  template:
+    metadata:
+      labels:
+        app: awesome-spring-postgres
+    spec:
+      containers:
+        - name: app
+          image: awesome-spring-postgres:hw3
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: awesome-spring-postgres-config
+                  key: SPRING_DATASOURCE_URL
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: POSTGRES_USER
+                  name: postgres
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: POSTGRES_PASSWORD
+                  name: postgres
+          ports:
+            - name: http
+              containerPort: 8080
