@@ -1,0 +1,54 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: chatbot-config
+data:
+  OLLAMA_URL: http://ollama-service:11434
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chatbot-service
+spec:
+  type: NodePort
+  ports:
+    - port: 8501
+      targetPort: 8501
+      nodePort: 30002
+  selector:
+    app: chatbot
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chatbot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chatbot
+  template:
+    metadata:
+      labels:
+        app: chatbot
+    spec:
+      containers:
+        - name: chatbot-container
+          image: intatl/ucu-chatbot:hw3
+          env:
+            - name: OLLAMA_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: chatbot-config
+                  key: OLLAMA_URL
+          ports:
+            - containerPort: 8501
+          resources:
+            limits:
+              memory: 1Gi
+              cpu: 1
+            requests:
+              memory: 0.5Gi
+              cpu: 0.5
