@@ -4,7 +4,5 @@ This repository contains homework assignments for the **Dev/DataOps** course.
 
 ## Homework
 
-1. [Homework 1](Homework1/README.md)
-2. [Homework 2](Homework2/README.md)
-2. [Homework 3](Homework3/README.md)
-2. [Homework 4](Homework4/README.md)
+1. [Module 1](./Module1/README.md)
+2. [Module 2](./Module2/README.md)
