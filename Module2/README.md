@@ -7,3 +7,4 @@
 3. [Homework 3](./Homework3/README.md)
 4. [Homework 4](./Homework4/README.md)
 4. [Homework 5](./Homework5/README.md)
+4. [Homework 6](./Homework6/README.md)
